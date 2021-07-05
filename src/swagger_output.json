@@ -1,9 +1,9 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "1.0.0",
-    "title": "REST API",
-    "description": ""
+    "title": "Pokeclub API",
+    "description": "Documentação da Pokeclub API.",
+    "version": "1.0.0"
   },
   "host": "localhost:3333",
   "basePath": "/",
@@ -60,6 +60,42 @@
                 }
               }
             }
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/pokemon/{pokemonId}": {
+      "get": {
+        "tags": [],
+        "description": "",
+        "parameters": [
+          {
+            "name": "pokemonId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/pokemon/{limit}/{page}": {
+      "get": {
+        "tags": [],
+        "description": "",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {}
