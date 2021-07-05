@@ -1,14 +1,20 @@
 import { Router } from "express";
 import api from "../config/api";
-
+import ensureAuthenticated from "../middleware/ensureAuthenticated";
 const pokemonRouter = Router();
 
+pokemonRouter.use(ensureAuthenticated);
+
+interface IPokemonsData {
+  name: string;
+  url: string;
+}
 
 // Procurar pokemon pelo nome ou id
 pokemonRouter.get("/:pokemonId", async (request, response) => {
   const { pokemonId } = request.params;
 
-  const {data} = await api.get(`/${pokemonId}`);
+  const { data } = await api.get(`/${pokemonId}`);
 
   const pokemon = {
     id: data.id,
@@ -17,8 +23,8 @@ pokemonRouter.get("/:pokemonId", async (request, response) => {
     types: data.types,
     base_experience: data.base_experience,
     abilities: data.abilities,
-    photo: `https://pokeres.bastionbot.org/images/pokemon/${data.id}.png`
-  }
+    photo: `https://pokeres.bastionbot.org/images/pokemon/${data.id}.png`,
+  };
 
   return response.json(pokemon);
 });
@@ -27,14 +33,16 @@ pokemonRouter.get("/:pokemonId", async (request, response) => {
 pokemonRouter.get("/:limit/:page", async (request, response) => {
   const { limit = "10", page = "1" } = request.params;
 
-  const pokemons = await api.get("/", {
+  const pokemonsData = await api.get("/", {
     params: {
       limit,
       offset: parseInt(limit) * (parseInt(page) - 1),
     },
   });
 
-  return response.json(pokemons.data.results);
+  const pokemons = pokemonsData.data.results.map((p: IPokemonsData) => p.name);
+
+  return response.json(pokemons);
 });
 
 export default pokemonRouter;
