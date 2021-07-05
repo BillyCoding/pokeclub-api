@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import "express-async-errors";
 import routes from "./routes";
 import swaggerUi from "swagger-ui-express";
+import cors from "cors";
 
 import swaggerFile from "./swagger_output.json";
 
@@ -10,6 +11,7 @@ import "reflect-metadata";
 import AppError from "./errors/AppError";
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(routes);
 
@@ -25,7 +27,7 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
     .json({ status: "error", message: "Internal server error" });
 });
 
-app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 const hostname = "localhost";
 const port = 3333;
